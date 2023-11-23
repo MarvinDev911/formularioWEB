@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario con jQuery Validation</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <style>
+        body {
+            background: url("bg.jpg") center center fixed;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #miFormulario {
+            max-width: 400px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.75);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input.error {
+            border: 1px solid #ff5555;
+        }
+
+        .error {
+            color: #ff5555;
+            margin-top: 5px;
+        }
+
+        button {
+            background-color: red;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: purple;
+        }
+    </style>
+</head>
+<body>
+
+    <form id="miFormulario">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="email">Correo electrónico:</label>
+        <input type="text" id="email" name="email" required>
+
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="confirmar_password">Confirmar Contraseña:</label>
+        <input type="password" id="confirmar_password" name="confirmar_password" required>
+
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" name="edad" required>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            $.validator.addMethod("customEmail", function(value, element) {
+                return /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(value);
+            }, "Por favor, introduce un correo electrónico válido.");
+
+            $("#miFormulario").validate({
+                rules: {
+                    nombre: "required",
+                    email: {
+                        required: true,
+                        customEmail: true
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6
+                    },
+                    confirmar_password: {
+                        required: true,
+                        equalTo: "#password"
+                    },
+                    edad: {
+                        required: true,
+                        digits: true,
+                        min: 18
+                    }
+                },
+                messages: {
+                    nombre: "Introduce tu nombre",
+                    email: {
+                        required: "Ingresa tu correo electronico ",
+                        customEmail: "Introduce un correo valido y sin errores "
+                    },
+                    password: {
+                        required: "digita tu contraseña",
+                        minlength: "muy pocos caracteres, digita una contraseña con 6 caracteres o mas"
+                    },
+                    confirmar_password: {
+                        required: "Confirma tu contraseña",
+                        equalTo: "Las contraseñas no coinciden"
+                    },
+                    edad: {
+                        required: "Digita tu edad",
+                        digits: "digita solo numeros",
+                        min: "no eres mayor de edad"
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
